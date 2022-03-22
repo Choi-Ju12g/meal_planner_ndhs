@@ -8,8 +8,7 @@ let MealList = {
     "dinner": "", 
  };
 
-const crawl = async () => {
-    console.log('시작');
+async function crawl(){
     const browser = await puppeteer.launch({headless: false});
     const page = await browser.newPage();
     const ndhs_id = 'skwjddn0619';
@@ -23,7 +22,7 @@ const crawl = async () => {
     await page.goto('http://portal.ndhs.or.kr/index');
 
     await page.click('body > div > div > div > div > div > div.row > div > div.login-body > div > div.col-xs-12.col-sm-5.login-con.pt20 > div > form > ul > li:nth-child(2) > a');
-    //await page.waitForTimeout('1000');
+
     //아이디랑 비밀번호 란에 값을 넣어라
     await page.evaluate((id, pw) => {
     document.querySelector('#stuUserId').value = id;
@@ -35,8 +34,7 @@ const crawl = async () => {
 
     //로그인 화면이 전환될 때까지 
     await page.waitForNavigation()
-    const list = await setList(page.url());
-    console.log(list);
+
     //로그인 성공 시(화면 전환 성공 시)
     if(page.url() === 'http://portal.ndhs.or.kr/dashboard/dashboard'){
         //학사 페이지로 가서
@@ -44,6 +42,7 @@ const crawl = async () => {
         const content = await page.content();
         const $ = cheerio.load(content);
         const lists = $("body > div.container-fluid > div:nth-child(6) > div > table > tbody > tr");
+        console.log(lists);
         lists.each((index, list) => {
             MealList[index] = {
                 date: $(list).find("th").text().replace('\n\t\t\t\t\t\t\t\t',""),
@@ -51,36 +50,19 @@ const crawl = async () => {
                 lunch:$(list).find("td:nth-of-type(2)").text(),
                 dinner:$(list).find("td:nth-of-type(3)").text()
             }
-            //const texts = $(list).find("th").text();
-            console.log(MealList[index]);
+            console.log(MealList[index]); 
+
         })
-          
     }
     //로그인 실패시
     else{
         console.log('실패');
-        student_id = 'nope';
-        name = 'nope';
+        ndhs_id = 'nope';
+        ndhs_pw = 'nope';
     }
     //브라우저 꺼라
-    await browser.close();
-    // return MealList        
+    await browser.close();     
 };
 
-async function setList(url){
-    const $ = cheerio.load(url);
-    const bodyList = $("body > div.container-fluid > div:nth-child(6) > div > table > tbody > tr");
-    bodyList.each(function(i, element){
-        console.log(element);
-        MealList[i] = {
-        date: String($(element).find("th").text()),
-        breakfast:String($(element).find("td:nth-of-type(1)").text()),
-        lunch:String($(element).find("td:nth-of-type(2)").text()),
-        dinner:String($(element).find("td:nth-of-type(3)").text()),
-        }
-        
-    });
-    return MealList 
-}
 
 crawl();

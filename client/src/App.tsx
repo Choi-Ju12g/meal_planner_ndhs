@@ -1,7 +1,9 @@
+import {LoginForm} from "./components/LoginForm";
 
 function App() {
   return (
     <div className="App">
+      <LoginForm></LoginForm>
       <button type="button" onClick={() => {
         fetch('/api/data')
         .then((res) => {

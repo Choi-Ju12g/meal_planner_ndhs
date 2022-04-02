@@ -1,17 +1,16 @@
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import Navigation from "Navigation";
 import {LoginForm} from "./components/LoginForm";
 import { MenuPlan } from "components/MenuPlan";
-import React from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "Navigation";
 
-function App() {
+function App() : JSX.Element {
   return (
-      <BrowerRouter>
         <Routes>
-          <Route path="/" exact component={LoginForm}></Route>
-          <Route path="/menuplan" exact component={MenuPlan}></Route>
+
+          <Route path="/"  element={<LoginForm/>}></Route>
+          <Route path="/menuplan" element={<MenuPlan/>}></Route>
         </Routes>
-      </BrowerRouter>ß
   );
 }
 

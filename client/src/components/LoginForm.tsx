@@ -7,6 +7,10 @@ import pass from "../statics/images/pass.png";
 
 export function LoginForm(){
 
+  function login(){
+    
+  }
+
     return(
     <div className="main">
       <div className="sub-main">

@@ -14,39 +14,37 @@ async function crawl(){
     const page = await browser.newPage();
     const ndhs_id = 'skwjddn0619';
     const ndhs_pw = '74qq74qq';
-    await page.setViewport({
-        width: 1366,
-        height: 768
-    });
+
+    // headless: false일때 브라우져 크기 지정해주는 코드
+    // await page.setViewport({
+    //     width: 1366,
+    //     height: 768
+    // });
 
     //페이지로 가라
     await page.goto('http://portal.ndhs.or.kr/index');
-    console.log('1');
 
     //해당 페이지에 특정 html 태그를 클릭해라
-    //await page.click('body > div > div > div > div > div > div.row > div > div.login-body > div > div.col-xs-12.col-sm-5.login-con.pt20 > div > form > ul > li:nth-child(2) > a');
     await page.click('body > div > div > div > div > div > div.row > div > div.login-body > div > div.col-xs-12.col-sm-5.login-con.pt20 > div > form > ul > li:nth-child(2)');
-    console.log('2');
     
     //아이디랑 비밀번호 란에 값을 넣어라
     await page.evaluate((id, pw) => {
     document.querySelector('#stuUserId').value = id;
     document.querySelector('#stuPassword').value = pw;
     }, ndhs_id, ndhs_pw);
-    console.log('3');
 
     //로그인 버튼을 클릭해라
     await page.click('#student > div > div:nth-child(2) > button');
-    console.log('4');
 
-    //로그인 화면이 전환될 때까지 기다려라
+    //로그인 화면이 전환될 때까지 기다려라, headless: false 일때는 필요 반대로 headless: true일때는 없어야 되는 코드
     //await page.waitForNavigation()
-    console.log('5');
 
     //로그인 성공 시(화면 전환 성공 시)
     if(page.url() === 'http://portal.ndhs.or.kr/dashboard/dashboard'){
         //학사 페이지로 가서
         await page.goto('http://portal.ndhs.or.kr/studentLifeSupport/carte/list');
+        
+        // 현재 페이지의 html정보를 로드
         const content = await page.content();
         const $ = cheerio.load(content);
         const lists = $("body > div.container-fluid > div:nth-child(6) > div > table > tbody > tr");
@@ -67,10 +65,9 @@ async function crawl(){
         ndhs_id = 'nope';
         ndhs_pw = 'nope';
     }
-    console.log('6');
+
     //브라우저 꺼라
     await browser.close();     
-    console.log('7');
 };
 
 

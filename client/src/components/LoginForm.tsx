@@ -1,15 +1,27 @@
 //import React, {useState} from 'react';
 //import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
 import '../statics/css/LoginForm.css';
 import profile from "../statics/images/a.png";
 import email from "../statics/images/email.jpg";
 import pass from "../statics/images/pass.png";
 
 export function LoginForm() {
+  const [inputID, setInputID] = useState('');
+  const [inputPW, setInputPW] = useState('');
 
-  function onCLicklogin() {
+  function onCLicklogin(): void {
 
+      fetch('/api/data')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
   }
+
+  const
 
   return (
     <div className="main">
@@ -40,6 +52,7 @@ export function LoginForm() {
   );
 }
 
+
 // <button type="button" onClick={() => {
 //         fetch('/api/data')
 //         .then((res) => {
@@ -49,7 +62,7 @@ export function LoginForm() {
 //           console.log(data);
 //         });
 //       }}>get data</button>
-
+}
     // return (
     // <LoginContainer className='login_container'>
     //   <InputForm placeholder='남도학숙 아이디를 적어주세요'></InputForm>
